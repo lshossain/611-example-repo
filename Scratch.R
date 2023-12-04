@@ -12,7 +12,7 @@ ggplot(NC_VS_2021, aes(x=SEX)) +
   labs(x = "Sex", y = 'Count') +
   theme(axis.text.x = element_text());
 
-#Deaths by Race
+#Deaths by Age
 ggplot(NC_VS_2021, aes(x=AGEYRS)) +
   geom_histogram(stat="count") +
   labs(x = "Age (Years)", y = 'Count') +
