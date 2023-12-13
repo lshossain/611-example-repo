@@ -22,3 +22,18 @@ Death Month
 Death Date 
 Death Year
 
+Accessing the Data and Report: 
+In order to generate this report you'll need to clone this repository and build a docker container. To clone this repository, navigate to the repository homepage and click the green "<> Code" button. Here you'll copy the https link (https://github.com/lshossain/bios-611.git) and run this in Terminal. 
+The command should be as follows: 
+
+git clone https://github.com/lshossain/bios-611.git
+cd bios-611
+
+Next we'll build and run a docker container within terminal. Note that prior to this, docker should already be running. The container will be built using the following code: 
+
+docker build . --build-arg USER_ID=$(id -u) -t 611
+
+docker run -v $(pwd):/home/rstudio/work -e PASSWORD=vitalstatsnc -p 8787:8787 -it rocker/verse
+
+
+
