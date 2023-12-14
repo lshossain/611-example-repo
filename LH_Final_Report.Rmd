@@ -8,22 +8,91 @@ date: "2023-12-13"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+#Understanding the Data: 
+The North Carolina State Center for Health Statistics (NCSHS) within the North Carolina Department of Health and Human Services collects and reports a multitude of data on topics such as cancer, minority health,and birth defects. NCSHS is also partnered with states nationwide to provide surveillance data 
+which includes the Behavioral Risk Factor Surveillance System (BRFSS), Child Health Assessment Monitoring Program (CHAMP), and Pregnancy Risk Assessment Monitoring System (PRAMS). 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+#Scope of this Report: 
+Annually, as a part of vital statistics reports, NCSHS also reports mortality data that dates back to 1968. Here we will be analyzing mortality data from 2021 which includes the following variables: 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+- Place of Death 
+- County of Occurrence
+- City of Occurrence
+- Decedent's Residence County 
+- Decedent's Residence City 
+- Sex 
+- Race of Decedent 
+- Age at Death 
+- Decedent's Education 
+- Place of Injury (if injury death)
+- Veteran Status
+- Death Month 
+- Death Date 
+- Death Year
 
-```{r cars}
-summary(cars)
+```{r setting up the data, include=FALSE}
+
+setwd("~/work/Desktop/final_project")
+install.packages("tidyverse")
+library(tidyverse) 
+NC_VS_2021 <- read_csv("project_source_data/North_Carolina_Vital_Statistics_2021.csv")
+
 ```
 
-## Including Plots
+## Plot 1: 
+The first plot looks at the total counts of mortality in NC in 2021 stratified by sex.
+```{r plot 1, include=TRUE}
 
-You can also embed plots, for example:
+#Deaths by Sex
+p = ggplot(NC_VS_2021, aes(x=SEX)) +
+  geom_histogram(stat="count") +
+  labs(x = "Sex", y = 'Count') +
+  theme(axis.text.x = element_text());
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+p
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## Plot 2: 
+
+``` {r plot 2, include=TRUE}
+#Death by Age
+p = ggplot(NC_VS_2021, aes(x=AGEYRS)) +
+  geom_histogram(stat="count") +
+  labs(x = "Age", y = 'Count') +
+  theme(axis.text.x = element_text());
+
+p
+
+
+```
+
+## Plot 3: 
+
+``` {r plot 3, include = TRUE}
+#Death by Race
+p = ggplot(NC_VS_2021, aes(x=RACER)) +
+  geom_histogram(stat="count") +
+  labs(x = "Race", y = 'Count') +
+  theme(axis.text.x = element_text());
+
+p
+
+```
+
+## Plot 4: 
+
+``` {r plot 4, include = TRUE}
+#Death by County
+p = ggplot(NC_VS_2021, aes(x=DHTMO)) +
+  geom_histogram(stat="count") +
+  labs(x = "Month", y = 'Count') +
+  theme(axis.text.x = element_text());
+
+p
+
+```
+
+
+
+## Future Questions
