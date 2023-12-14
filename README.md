@@ -24,6 +24,9 @@ password: vitalstatsnc
 Don't forget to set the working directory to the top location of the project by running the following code within RStudio: 
 setwd("~/work/Desktop/final_project")
 
+Then to access the report type into the terminal: 
+make LH_Final_Report 
+
 
 
 

@@ -39,6 +39,7 @@ NC_VS_2021 <- read_csv("project_source_data/North_Carolina_Vital_Statistics_2021
 ```
 
 ## Plot 1: 
+
 The first plot looks at the total counts of mortality in NC in 2021 stratified by sex.
 ```{r plot 1, include=TRUE}
 
@@ -46,7 +47,8 @@ The first plot looks at the total counts of mortality in NC in 2021 stratified b
 p = ggplot(NC_VS_2021, aes(x=SEX)) +
   geom_histogram(stat="count") +
   labs(x = "Sex", y = 'Count') +
-  theme(axis.text.x = element_text());
+  theme(axis.text.x = element_text()) + 
+  ggtitle("NC Deaths in 2021 Stratified by Sex");
 
 p
 ```
@@ -54,69 +56,83 @@ p
 
 ## Plot 2: 
 
+The second plot looks at the distribution in deaths in 2021 by age.
 ``` {r plot 2, include=TRUE}
 #Death by Age
-p = ggplot(NC_VS_2021, aes(x=AGEYRS)) +
-  geom_histogram(stat="count") +
+p <- ggplot(NC_VS_2021, aes(x = AGEYRS)) +
+  geom_histogram(stat = "count", binwidth = 10) +
   labs(x = "Age", y = 'Count') +
-  theme(axis.text.x = element_text());
+  scale_x_continuous(breaks = seq(0, max(NC_VS_2021$AGEYRS) + 10, 10)) +
+  theme(axis.text.x = element_text()) +
+  ggtitle("NC Death Distribution by Age at Death")
 
-p
+print(p)
 
 
 ```
+
+
 
 ## Plot 3: 
 
-``` {r plot 3, include = TRUE}
-#Death by Race
-p = ggplot(NC_VS_2021, aes(x=RACER)) +
-  geom_histogram(stat="count") +
-  labs(x = "Race", y = 'Count') +
-  theme(axis.text.x = element_text());
+The third plot looks at the distribution in deaths in 2021 by month.
+``` {r plot 4, include = TRUE}
+#Death by Month
+months_labels <- c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
 
-p
-
-p <- ggplot(NC_VS_2021, aes(x = RACER)) +
+p <- ggplot(NC_VS_2021, aes(x = DHTMO)) +
   geom_histogram(stat = "count") +
-  labs(x = "Race", y = 'Count') +
-  theme(axis.text.x = element_text()) +
-  coord_cartesian(xlim = c(0, 5))
+  labs(x = "Month", y = 'Count') +
+  scale_x_continuous(breaks = 1:12, labels = months_labels) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ggtitle("North Carolina Deaths by Month in 2021")
 
-p
+print(p)
 
 ```
+
 
 ## Plot 4: 
 
-``` {r plot 4, include = TRUE}
-#Death by Month
-p = ggplot(NC_VS_2021, aes(x=DHTMO)) +
-  geom_histogram(stat="count") +
-  labs(x = "Month", y = 'Count') +
-  theme(axis.text.x = element_text());
-
-p
-
-```
-
-
-## Plot 5: 
-
+The fourth plot looks at the distribution in deaths based on tobacco usage status.
 ``` {r plot 5, include = TRUE}
-#Death by County
-p = ggplot(NC_VS_2021, aes(x=TOBACCO)) +
-  geom_histogram(stat="count") +
-  labs(x = "Month", y = 'Count') +
-  theme(axis.text.x = element_text());
+#Death Stratified by Tobacco Usage
+code_labels <- c("C" = "Not on Certificate", "N" = "No", "P" = "Probably", "U" = "Unknown", "Y" = "Yes")
 
-p
+p <- ggplot(NC_VS_2021, aes(x = TOBACCO)) +
+  geom_histogram(stat = "count") +
+  labs(x = "Tobacco Usage Status", y = 'Count') +
+  scale_x_discrete(labels = code_labels) +  
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +  
+  ggtitle("Death stratified by Tobacco Usage Status")
+
+print(p)
 
 ```
 
 
 
+##Plot 5: 
 
+The fifth plot looks at the different locations of deaths.
+``` {r plot 6, include = TRUE}
+#Place of Death Distribution
+custom_labels <- c("1 Inpatient", "2 Emergency Room", "3 Dead on Arrival", 
+                   "4 Decedent's Home", "5 Hospice Facility", "6 Nursing Home", "7 Other", 
+                   "Unknown")
+
+p <- ggplot(NC_VS_2021, aes(x = factor(DPLACE))) +
+  geom_histogram(stat = "count") +
+  labs(x = "Place of Death", y = 'Count') +
+  scale_x_discrete(labels = custom_labels) +  
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+  ggtitle("NC Resident Death Location 2021") + 
+  geom_text(stat = "count", aes(label = after_stat(count), vjust = -0.5), color = "red", position = position_stack(vjust = 0.5))
+
+
+print(p)
+
+```
 
 
 ##Additional Analysis: 
@@ -142,8 +158,14 @@ cat("Most common value(s):", most_common_values, "\n")
 
 ```
 
+Mortality report data contains up to 20 different mentioned causes of death in order that utilize ICD-10 codes. The frequencies projected show the most common ICD-10 codes for preliminary, secondary, and tertiary cause of death. 
 
+1. Most common preliminary cause of death  = U071 (COVID-19) 14,228
+2. Most common secondary cause of death  = F179 (Nicotine Dependence, Unspecified, with Withdrawal) 9,459
+3. Most common tertiary cause of death  = I10 (Essential Hypertension and Hypertensive Renal
+Disease) 5,069
 
 
 ## Future Questions
-These priliminary findings help understand the shape and distribution of the data but additional analyses such as regressions could be done to better map assosciations. 
+
+These preliminary findings help understand the shape and distribution of the data but additional analyses such as regressions could be done to better map associations. It would also be interesting to run the same plots on NC vital statistics mortality data from previous years prior to COVID-19 to see how the plots looking at counts of death by age, sex, distribution throughout the year, death place, etc differed possibly as a result of COVID-19 and overall to see the changes in death distributions across these topics. This insight could help identify areas of public health need. 
